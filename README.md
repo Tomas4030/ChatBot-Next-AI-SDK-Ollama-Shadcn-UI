@@ -1,5 +1,41 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Project Structure
+
+```
+.
+├─ app/
+│  ├─ api/
+│  │  └─ chat/
+│  │     └─ route.ts
+│  ├─ globals.css
+│  ├─ layout.tsx
+│  └─ page.tsx
+├─ components/
+│  └─ ui/
+│     ├─ avatar.tsx
+│     ├─ button.tsx
+│     ├─ card.tsx
+│     └─ input.tsx
+├─ data/
+│  └─ docs/ (empty)
+├─ lib/
+│  ├─ llm/
+│  │  ├─ ollama.ts
+│  │  └─ prompts.ts
+│  └─ utils.ts
+├─ public/ (empty)
+├─ components.json
+├─ eslint.config.mjs
+├─ next-env.d.ts
+├─ next.config.ts
+├─ package-lock.json
+├─ package.json
+├─ postcss.config.mjs
+├─ README.md
+└─ tsconfig.json
+```
+
 ## Getting Started
 
 First, run the development server:

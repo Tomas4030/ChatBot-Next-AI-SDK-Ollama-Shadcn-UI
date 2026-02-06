@@ -1,5 +1,5 @@
-import { BASE_PROMPT, PERSONAS } from "@/lib/llm/prompts";
-import { askOllama } from "@/lib/llm/ollama";
+import { NextResponse } from "next/server";
+import { BASE_PROMPT, PERSONAS } from "@/lib/prompts";
 
 export async function POST(req: Request) {
   try {
@@ -9,27 +9,46 @@ export async function POST(req: Request) {
     };
 
     const style =
-      persona && persona in PERSONAS ? PERSONAS[persona] : PERSONAS.exigente;
+      persona && persona in PERSONAS ? PERSONAS[persona] : PERSONAS.calmo;
 
-    const fullPrompt = `
-${BASE_PROMPT}
+    const response = await fetch(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "llama-3.3-70b-versatile",
+          messages: [
+            {
+              role: "system",
+              content: `${BASE_PROMPT}\n\nCONTEXTO DE ESTILO: ${style}`,
+            },
+            {
+              role: "user",
+              content: message,
+            },
+          ],
+          temperature: 0.4,
+        }),
+      },
+    );
 
-PERSONA:
-${style}
+    const data = await response.json();
 
-PERGUNTA DO ALUNO:
-${message}
+    if (!response.ok) {
+      throw new Error(data.error?.message || "Erro na Groq");
+    }
 
-RESPOSTA:
-`;
-
-    const response = await askOllama(fullPrompt);
-
-    return Response.json({ response });
+    return NextResponse.json({ response: data.choices[0].message.content });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unexpected error";
-    return Response.json(
-      { response: "Falha ao gerar resposta.", error: message },
+    return NextResponse.json(
+      {
+        response:
+          "Tive um problema a processar essa explicação. Tenta de novo!",
+      },
       { status: 500 },
     );
   }
