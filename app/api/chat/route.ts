@@ -30,7 +30,7 @@ export async function POST(req: Request) {
               role: "system",
               content: `${BASE_PROMPT}\n\nCONTEXTO DE ESTILO: ${style}`,
             },
-            ...messages, // 🔥 MEMÓRIA AQUI
+            ...messages, 
           ],
           temperature: 0.4,
         }),

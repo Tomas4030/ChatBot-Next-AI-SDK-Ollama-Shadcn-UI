@@ -3,16 +3,25 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import {
-  Card, CardDescription, CardHeader, CardTitle,
-  CardAction, CardContent, CardFooter,
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardAction,
+  CardContent,
+  CardFooter,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Trash2 } from "lucide-react";
 import {
-  Combobox, ComboboxContent, ComboboxEmpty,
-  ComboboxInput, ComboboxItem, ComboboxList,
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
 } from "@/components/ui/combobox";
 import { PERSONAS } from "@/lib/prompts";
 
@@ -33,9 +42,9 @@ export default function Home() {
 
     const userMsg: Msg = { role: "user", content: input };
 
-    // 🔥 Limite de memória
-    const MAX_HISTORY = 12;
+    const MAX_HISTORY = 12; // Limite de memória (12 )
     const updatedMessages = [...messages, userMsg].slice(-MAX_HISTORY);
+    console.log("Enviando mensagens para a API:", updatedMessages);
 
     setMessages(updatedMessages);
     setInput("");
@@ -86,7 +95,9 @@ export default function Home() {
                 <ComboboxEmpty>Nenhuma opção encontrada.</ComboboxEmpty>
                 <ComboboxList>
                   {(item) => (
-                    <ComboboxItem key={item} value={item}>{item}</ComboboxItem>
+                    <ComboboxItem key={item} value={item}>
+                      {item}
+                    </ComboboxItem>
                   )}
                 </ComboboxList>
               </ComboboxContent>
@@ -98,10 +109,16 @@ export default function Home() {
           {messages.map((msg, i) => (
             <div key={i} className="flex gap-3 text-sm">
               <Avatar>
-                <AvatarImage src={msg.role === "user"
-                  ? "https://github.com/tomas4030.png"
-                  : "https://i.pinimg.com/736x/af/cb/dc/afcbdccb8720fadc583aa5d99b1df134.jpg"} />
-                <AvatarFallback>{msg.role === "user" ? "U" : "AI"}</AvatarFallback>
+                <AvatarImage
+                  src={
+                    msg.role === "user"
+                      ? "https://github.com/tomas4030.png"
+                      : "https://i.pinimg.com/736x/af/cb/dc/afcbdccb8720fadc583aa5d99b1df134.jpg"
+                  }
+                />
+                <AvatarFallback>
+                  {msg.role === "user" ? "U" : "AI"}
+                </AvatarFallback>
               </Avatar>
               <div className="w-full">
                 <span className="font-bold block mb-1">
@@ -111,7 +128,9 @@ export default function Home() {
               </div>
             </div>
           ))}
-          {loading && <p className="text-sm animate-pulse pl-12">A escrever...</p>}
+          {loading && (
+            <p className="text-sm animate-pulse pl-12">A escrever...</p>
+          )}
         </CardContent>
 
         <CardFooter className="p-4 border-t">
@@ -120,7 +139,9 @@ export default function Home() {
               variant="ghost"
               size="icon"
               onClick={() =>
-                setMessages([{ role: "assistant", content: "Nova conversa iniciada!" }])
+                setMessages([
+                  { role: "assistant", content: "Nova conversa iniciada!" },
+                ])
               }
             >
               <Trash2 className="h-4 w-4" />
