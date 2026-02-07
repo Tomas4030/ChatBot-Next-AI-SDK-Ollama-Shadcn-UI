@@ -7,6 +7,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardAction,
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
@@ -14,18 +15,29 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Trash2 } from "lucide-react";
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "@/components/ui/combobox";
+
+import { PERSONAS } from "@/lib/prompts";
 
 type Msg = {
   role: "user" | "assistant";
   content: string;
 };
 
-type PersonaOption = "calmo" | "exigente" | "infantil";
+const PersonaOption = Object.keys(PERSONAS) as (keyof typeof PERSONAS)[];
 
 export default function Home() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Msg[]>([]);
-  const [persona, setPersona] = useState<PersonaOption>("calmo");
+  const [persona, setPersona] =
+    useState<(typeof PersonaOption)[number]>("matematica");
   const [loading, setLoading] = useState(false);
 
   const sendMessage = async () => {
@@ -64,16 +76,39 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen bg-slate-50 items-center justify-center p-4">
-      <Card className="w-full max-w-md h-[80vh] grid grid-rows-[min-content_1fr_min-content]">
+      <Card className="w-full h-[85vh] grid grid-rows-[min-content_1fr_min-content]">
         <CardHeader>
           <CardTitle>Chat AI</CardTitle>
-          <CardDescription>Assistente Educacional ({persona})</CardDescription>
+          <CardDescription>Assistente Educacional</CardDescription>
+          <CardAction>
+            <div className="">
+              <Combobox
+                items={PersonaOption}
+                value={persona}
+                onValueChange={(value) =>
+                  setPersona(value as (typeof PersonaOption)[number])
+                }
+              >
+                <ComboboxInput placeholder="Escolhe a disciplina" />
+                <ComboboxContent>
+                  <ComboboxEmpty>Nenhuma opção encontrada.</ComboboxEmpty>
+                  <ComboboxList>
+                    {(item) => (
+                      <ComboboxItem key={item} value={item}>
+                        {item}
+                      </ComboboxItem>
+                    )}
+                  </ComboboxList>
+                </ComboboxContent>
+              </Combobox>
+            </div>
+          </CardAction>
         </CardHeader>
 
         <CardContent className="space-y-4 overflow-y-auto p-4">
           {messages.length === 0 && (
             <div className="text-center text-slate-400 mt-10">
-              <p>Olá! Escolhe uma personalidade abaixo e faz uma pergunta.</p>
+              <p>Em que posso ajudar-te hoje?</p>
             </div>
           )}
 
@@ -84,7 +119,7 @@ export default function Home() {
                   src={
                     msg.role === "user"
                       ? "https://github.com/tomas4030.png"
-                      : "https://cdn-icons-png.flaticon.com/512/4712/4712109.png"
+                      : "https://i.pinimg.com/736x/af/cb/dc/afcbdccb8720fadc583aa5d99b1df134.jpg"
                   }
                 />
                 <AvatarFallback>
@@ -125,32 +160,6 @@ export default function Home() {
 
         <CardFooter className="flex flex-col gap-3 bg-slate-50/50 p-4 border-t">
           {/* Seletor de Personalidade */}
-          <div className="flex w-full gap-2 justify-center">
-            <Button
-              size="sm"
-              variant={persona === "calmo" ? "default" : "outline"}
-              onClick={() => setPersona("calmo")}
-              className="flex-1"
-            >
-              Calmo
-            </Button>
-            <Button
-              size="sm"
-              variant={persona === "exigente" ? "default" : "outline"}
-              onClick={() => setPersona("exigente")}
-              className="flex-1"
-            >
-              Exigente
-            </Button>
-            <Button
-              size="sm"
-              variant={persona === "infantil" ? "default" : "outline"}
-              onClick={() => setPersona("infantil")}
-              className="flex-1"
-            >
-              Infantil
-            </Button>
-          </div>
 
           {/* Input e Enviar */}
           <div className="flex w-full gap-2">
