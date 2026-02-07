@@ -1,15 +1,19 @@
 import { NextResponse } from "next/server";
 import { BASE_PROMPT, PERSONAS } from "@/lib/prompts";
 
+type PersonaKey = keyof typeof PERSONAS;
+
 export async function POST(req: Request) {
   try {
-    const { message, persona } = (await req.json()) as {
-      message: string;
-      persona?: keyof typeof PERSONAS;
+    const { messages, persona } = (await req.json()) as {
+      messages: { role: "user" | "assistant"; content: string }[];
+      persona?: PersonaKey;
     };
 
-    const style =
-      persona && persona in PERSONAS ? PERSONAS[persona] : PERSONAS.matematica;
+    const style: string =
+      persona && persona in PERSONAS
+        ? PERSONAS[persona]
+        : PERSONAS.matematica;
 
     const response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
@@ -26,14 +30,11 @@ export async function POST(req: Request) {
               role: "system",
               content: `${BASE_PROMPT}\n\nCONTEXTO DE ESTILO: ${style}`,
             },
-            {
-              role: "user",
-              content: message,
-            },
+            ...messages, // 🔥 MEMÓRIA AQUI
           ],
           temperature: 0.4,
         }),
-      },
+      }
     );
 
     const data = await response.json();
@@ -42,14 +43,13 @@ export async function POST(req: Request) {
       throw new Error(data.error?.message || "Erro na Groq");
     }
 
-    return NextResponse.json({ response: data.choices[0].message.content });
+    return NextResponse.json({
+      response: data.choices[0].message.content,
+    });
   } catch (error) {
     return NextResponse.json(
-      {
-        response:
-          "Tive um problema a processar essa explicação. Tenta de novo!",
-      },
-      { status: 500 },
+      { response: "Tive um problema a processar a mensagem. Tenta outra vez!" },
+      { status: 500 }
     );
   }
 }
