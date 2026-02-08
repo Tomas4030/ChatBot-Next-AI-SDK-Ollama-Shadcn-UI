@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { BASE_PROMPT, PERSONAS } from "@/lib/prompts";
+import { BASE_PROMPT, PERSONAS, PERSONA_FALLBACK_RULE } from "@/lib/prompts";
 
 type PersonaKey = keyof typeof PERSONAS;
 
@@ -11,9 +11,7 @@ export async function POST(req: Request) {
     };
 
     const style: string =
-      persona && persona in PERSONAS
-        ? PERSONAS[persona]
-        : PERSONAS.matematica;
+      persona && persona in PERSONAS ? PERSONAS[persona] : PERSONAS.matematica;
 
     const response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
@@ -28,13 +26,22 @@ export async function POST(req: Request) {
           messages: [
             {
               role: "system",
-              content: `${BASE_PROMPT}\n\nCONTEXTO DE ESTILO: ${style}`,
+              content: `
+              ${BASE_PROMPT}
+
+              PERSONA ATIVA:
+              ${style}
+
+              REGRA DE ESPECIALIDADE:
+              ${PERSONA_FALLBACK_RULE}
+              `,
             },
-            ...messages, 
+
+            ...messages,
           ],
           temperature: 0.4,
         }),
-      }
+      },
     );
 
     const data = await response.json();
@@ -49,7 +56,7 @@ export async function POST(req: Request) {
   } catch (error) {
     return NextResponse.json(
       { response: "Tive um problema a processar a mensagem. Tenta outra vez!" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

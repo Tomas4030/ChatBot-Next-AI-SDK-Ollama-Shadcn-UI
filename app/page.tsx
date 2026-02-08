@@ -24,6 +24,7 @@ import {
   ComboboxList,
 } from "@/components/ui/combobox";
 import { PERSONAS } from "@/lib/prompts";
+import ElasticText from "@/components/ui/ElasticText";
 
 type Msg = { role: "user" | "assistant"; content: string };
 type PersonaKey = keyof typeof PERSONAS;
@@ -82,8 +83,12 @@ export default function Home() {
     <div className="flex min-h-screen bg-slate-50 items-center justify-center p-4">
       <Card className="w-full h-[85vh] grid grid-rows-[min-content_1fr_min-content]">
         <CardHeader>
-          <CardTitle>Chat AI</CardTitle>
-          <CardDescription>Assistente Educacional</CardDescription>
+          <CardTitle className="text-2xl font-bold flex">
+            <ElasticText text="DaVinci AI" />
+          </CardTitle>
+          <CardDescription className="text-1xl ">
+            Assistente Educacional
+          </CardDescription>
           <CardAction>
             <Combobox
               items={PersonaOption}
