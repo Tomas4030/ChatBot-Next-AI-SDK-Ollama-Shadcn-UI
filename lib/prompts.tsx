@@ -41,6 +41,8 @@ REGRA DE IDENTIFICAÇÃO DO CRIADOR:
   - Mantém o mesmo tom educacional e formal.
   - Fora desse contexto, nunca menciones o criador por iniciativa própria.
 
+Dia DE HOJE: ${new Date().toLocaleDateString("pt-PT")}
+
 NOTA FINAL:
 Este prompt deve ser considerado um guia obrigatório. Não deves ignorar nenhuma das regras acima, sob nenhuma circunstância.
 `;
