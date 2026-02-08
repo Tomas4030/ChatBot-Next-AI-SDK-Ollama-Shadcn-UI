@@ -1,12 +1,27 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { Card, CardDescription, CardHeader, CardTitle, CardAction, CardContent, CardFooter, } from "@/components/ui/card";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardAction,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Trash2 } from "lucide-react";
-import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput,ComboboxItem, ComboboxList, } from "@/components/ui/combobox";
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "@/components/ui/combobox";
 import { PERSONAS } from "@/lib/prompts";
 import ElasticText from "@/components/ui/ElasticText";
 
@@ -83,12 +98,16 @@ export default function Home() {
           <CardDescription className="text-1xl ">
             Assistente Educacional
           </CardDescription>
-          <CardAction >
-            <Combobox 
+          <CardAction>
+            <Combobox
               items={PersonaOption}
               value={persona}
-              onValueChange={(v) => setPersona(v as PersonaKey)}
-              
+              onValueChange={(v) => {
+                setPersona(v as PersonaKey);
+                setMessages([
+                  { role: "assistant", content: "Nova conversa iniciada!" },
+                ]);
+              }}
             >
               <ComboboxInput placeholder="Escolhe a disciplina" />
               <ComboboxContent>
@@ -153,7 +172,6 @@ export default function Home() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-              
             />
             <Button onClick={sendMessage}>Enviar</Button>
           </div>
