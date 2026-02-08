@@ -1,28 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  CardAction,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle, CardAction, CardContent, CardFooter, } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Trash2 } from "lucide-react";
-import {
-  Combobox,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-} from "@/components/ui/combobox";
+import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput,ComboboxItem, ComboboxList, } from "@/components/ui/combobox";
 import { PERSONAS } from "@/lib/prompts";
 import ElasticText from "@/components/ui/ElasticText";
 
@@ -37,6 +22,16 @@ export default function Home() {
   ]);
   const [persona, setPersona] = useState<PersonaKey>("matematica");
   const [loading, setLoading] = useState(false);
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
@@ -127,7 +122,7 @@ export default function Home() {
               </Avatar>
               <div className="w-full">
                 <span className="font-bold block mb-1">
-                  {msg.role === "user" ? "Tu:" : "Chatbot:"}
+                  {msg.role === "user" ? "Tu:" : "DaVinci AI:"}
                 </span>
                 <ReactMarkdown>{msg.content}</ReactMarkdown>
               </div>
@@ -136,6 +131,7 @@ export default function Home() {
           {loading && (
             <p className="text-sm animate-pulse pl-12">A escrever...</p>
           )}
+          <div ref={messagesEndRef} />
         </CardContent>
 
         <CardFooter className="p-4 border-t">
