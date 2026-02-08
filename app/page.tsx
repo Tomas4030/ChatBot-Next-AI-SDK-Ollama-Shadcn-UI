@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Card, CardDescription, CardHeader, CardTitle, CardAction, CardContent, CardFooter, } from "@/components/ui/card";
@@ -20,7 +19,7 @@ export default function Home() {
   const [messages, setMessages] = useState<Msg[]>([
     { role: "assistant", content: "Olá! Como posso ajudar?" },
   ]);
-  const [persona, setPersona] = useState<PersonaKey>("matematica");
+  const [persona, setPersona] = useState<PersonaKey>("Matematica");
   const [loading, setLoading] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -84,11 +83,12 @@ export default function Home() {
           <CardDescription className="text-1xl ">
             Assistente Educacional
           </CardDescription>
-          <CardAction>
-            <Combobox
+          <CardAction >
+            <Combobox 
               items={PersonaOption}
               value={persona}
               onValueChange={(v) => setPersona(v as PersonaKey)}
+              
             >
               <ComboboxInput placeholder="Escolhe a disciplina" />
               <ComboboxContent>
@@ -107,7 +107,7 @@ export default function Home() {
 
         <CardContent className="space-y-4 overflow-y-auto p-4">
           {messages.map((msg, i) => (
-            <div key={i} className="flex gap-3 text-sm">
+            <div key={i} className="flex gap-3 text-sm animate-slide-down">
               <Avatar>
                 <AvatarImage
                   src={
@@ -153,6 +153,7 @@ export default function Home() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+              
             />
             <Button onClick={sendMessage}>Enviar</Button>
           </div>

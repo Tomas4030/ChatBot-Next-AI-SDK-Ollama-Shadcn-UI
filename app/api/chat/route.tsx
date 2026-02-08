@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     };
 
     const style: string =
-      persona && persona in PERSONAS ? PERSONAS[persona] : PERSONAS.matematica;
+      persona && persona in PERSONAS ? PERSONAS[persona] : PERSONAS.Matematica;
 
     const response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
