@@ -78,7 +78,6 @@ O [Shadcn UI](https://ui.shadcn.com/) é uma coleção de componentes React aces
 1. **Clona o repositório:**
    ```bash
    git clone <url-do-repo>
-   cd chatbot
    ```
 2. **Instala as dependências:**
    ```bash
