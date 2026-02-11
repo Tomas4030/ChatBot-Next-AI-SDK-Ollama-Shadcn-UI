@@ -1,3 +1,0 @@
-scroll auto
-ver os promt das personas
-nome e descrição

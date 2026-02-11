@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/combobox";
 import { PERSONAS } from "@/lib/prompts";
 import ElasticText from "@/components/ui/ElasticText";
+import { ModeToggle } from "@/components/ui/toggleDarkMode";
 
 type Msg = { role: "user" | "assistant"; content: string };
 type PersonaKey = keyof typeof PERSONAS;
@@ -99,28 +100,31 @@ export default function Home() {
             Assistente Educacional
           </CardDescription>
           <CardAction>
-            <Combobox
-              items={PersonaOption}
-              value={persona}
-              onValueChange={(v) => {
-                setPersona(v as PersonaKey);
-                setMessages([
-                  { role: "assistant", content: "Nova conversa iniciada!" },
-                ]);
-              }}
-            >
-              <ComboboxInput placeholder="Escolhe a disciplina" />
-              <ComboboxContent>
-                <ComboboxEmpty>Nenhuma opção encontrada.</ComboboxEmpty>
-                <ComboboxList>
-                  {(item) => (
-                    <ComboboxItem key={item} value={item}>
-                      {item}
-                    </ComboboxItem>
-                  )}
-                </ComboboxList>
-              </ComboboxContent>
-            </Combobox>
+            <div className="flex items-center gap-2">
+              <Combobox
+                items={PersonaOption}
+                value={persona}
+                onValueChange={(v) => {
+                  setPersona(v as PersonaKey);
+                  setMessages([
+                    { role: "assistant", content: "Nova conversa iniciada!" },
+                  ]);
+                }}
+              >
+                <ComboboxInput placeholder="Escolhe a disciplina" />
+                <ComboboxContent>
+                  <ComboboxEmpty>Nenhuma opção encontrada.</ComboboxEmpty>
+                  <ComboboxList>
+                    {(item) => (
+                      <ComboboxItem key={item} value={item}>
+                        {item}
+                      </ComboboxItem>
+                    )}
+                  </ComboboxList>
+                </ComboboxContent>
+                <ModeToggle />
+              </Combobox>
+            </div>
           </CardAction>
         </CardHeader>
 
