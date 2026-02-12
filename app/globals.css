@@ -212,3 +212,29 @@
     1.00074
   );
 }
+
+/* Scrollbar clean para textarea */
+textarea.custom-scrollbar {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(156, 163, 175, 0.6) transparent; /* thumb cor e track cor */
+}
+
+/* Webkit browsers */
+textarea.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+textarea.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+textarea.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.6);
+  border-radius: 9999px;
+  border: 1px solid transparent;
+}
+
+textarea.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(156, 163, 175, 0.8);
+}
